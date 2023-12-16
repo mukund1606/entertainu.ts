@@ -7,7 +7,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/**/*.ts --format cjs,esm --minify --dts",
+    "build": "tsup src/*.ts src/**/*.ts --format cjs,esm --dts",
     "lint": "prettier --write src/ test/",
     "release": "pnpm run build && changeset publish",
     "prepare": "husky install",
