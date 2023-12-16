@@ -7,7 +7,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsup src/**/*.ts --format cjs,esm --minify --dts",
     "lint": "prettier --write src/ test/",
     "release": "pnpm run build && changeset publish",
     "prepare": "husky install",
@@ -67,6 +67,7 @@
     "prettier": "^3.1.1",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
+    "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   }
 }
