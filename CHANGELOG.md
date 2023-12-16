@@ -1,5 +1,11 @@
 # @mukund1606/entertainu
 
+## 0.0.4
+
+### Patch Changes
+
+- ab45c80: Modifier tsup config
+
 ## 0.0.3
 
 ### Patch Changes
