@@ -1,5 +1,11 @@
 # @mukund1606/entertainu
 
+## 0.0.6
+
+### Patch Changes
+
+- f7cac8a: Publish CI change
+
 ## 0.0.5
 
 ### Patch Changes
