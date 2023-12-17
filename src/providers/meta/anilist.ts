@@ -1,5 +1,6 @@
 import axios, { AxiosAdapter } from 'axios';
 
+import AnilistRandomExtractor from '../../extractors/anilistrandom';
 import {
   AnimeParser,
   Genres,
@@ -1147,6 +1148,22 @@ class Anilist extends AnimeParser {
     }
   };
 
+  getWeekStartDate = () => {
+    const date = new Date();
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is Sunday
+    date.setHours(0, 0, 0, 0);
+    return Math.floor(new Date(date.setDate(diff)).getTime() / 1000); // return Unix timestamp
+  };
+
+  getWeekEndDate = () => {
+    const date = new Date();
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? 0 : 7); // adjust when day is Sunday
+    date.setHours(23, 59, 59, 999);
+    return Math.floor(new Date(date.setDate(diff)).getTime() / 1000); // return Unix timestamp
+  };
+
   /**
    *
    * @param page page number (optional)
@@ -1159,28 +1176,16 @@ class Anilist extends AnimeParser {
   fetchAiringSchedule = async (
     page: number = 1,
     perPage: number = 20,
-    weekStart: number | string = (new Date().getDay() + 1) % 7,
-    weekEnd: number | string = (new Date().getDay() + 7) % 7,
+    weekStart: number = this.getWeekStartDate(),
+    weekEnd: number = this.getWeekEndDate(),
     notYetAired: boolean = false,
   ): Promise<ISearch<IAnimeResult>> => {
-    let day1,
-      day2 = undefined;
-
-    if (typeof weekStart === 'string' && typeof weekEnd === 'string')
-      [day1, day2] = getDays(
-        capitalizeFirstLetter(weekStart.toLowerCase()),
-        capitalizeFirstLetter(weekEnd.toLowerCase()),
-      );
-    else if (typeof weekStart === 'number' && typeof weekEnd === 'number')
-      [day1, day2] = [weekStart, weekEnd];
-    else throw new Error('Invalid weekStart or weekEnd');
-
     const options = {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      query: anilistAiringScheduleQuery(page, perPage, day1, day2, notYetAired),
+      query: anilistAiringScheduleQuery(page, perPage, weekStart, weekEnd, notYetAired),
     };
 
     try {
@@ -1257,6 +1262,8 @@ class Anilist extends AnimeParser {
       const res: ISearch<IAnimeResult> = {
         currentPage: data.data.Page.pageInfo.currentPage,
         hasNextPage: data.data.Page.pageInfo.hasNextPage,
+        totalPages: data.data.Page.pageInfo.lastPage,
+        totalResults: data.data.Page.pageInfo.total,
         results: data.data.Page.media.map((item: any) => ({
           id: item.id.toString(),
           malId: item.idMal,
@@ -1373,22 +1380,10 @@ class Anilist extends AnimeParser {
     };
 
     try {
-      // const {
-      //   data: { data },
-      // } = await this.client.post(this.anilistGraphqlUrl, options);
-
-      // const selectedAnime = Math.floor(
-      //   Math.random() * data.SiteStatistics.anime.nodes[data.SiteStatistics.anime.nodes.length - 1].count
-      // );
-      // const { results } = await this.advancedSearch(undefined, 'ANIME', Math.ceil(selectedAnime / 50), 50);
-
-      const { data: data } = await this.client.get(
-        'https://raw.githubusercontent.com/5H4D0WILA/IDFetch/main/ids.txt',
-      );
-
-      const ids = data?.trim().split('\n');
-      const selectedAnime = Math.floor(Math.random() * ids.length);
-      return await this.fetchAnimeInfo(ids[selectedAnime]);
+      const randomAnimeExtractor = new AnilistRandomExtractor();
+      const ids = await randomAnimeExtractor.extract();
+      const selectedAnime = ids[Math.floor(Math.random() * ids.length)];
+      return await this.fetchAnimeInfo(selectedAnime);
     } catch (err) {
       throw new Error((err as Error).message);
     }
