@@ -1,5 +1,11 @@
 # @mukund1606/entertainu
 
+## 0.0.7
+
+### Patch Changes
+
+- c653dfc: Anilist Few Bugs Fixes
+
 ## 0.0.6
 
 ### Patch Changes
