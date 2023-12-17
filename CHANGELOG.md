@@ -1,5 +1,11 @@
 # @mukund1606/entertainu
 
+## 0.0.5
+
+### Patch Changes
+
+- 5c51ddb: Added Commitlit and Commitzen and Tried Changing Changelog Commit Message
+
 ## 0.0.4
 
 ### Patch Changes
