@@ -1,30 +1,30 @@
 import { AxiosAdapter } from 'axios';
 import { load } from 'cheerio';
 
+import { GogoCDN, StreamSB } from '../../extractors';
 import {
   AnimeParser,
-  ISearch,
   IAnimeInfo,
-  IEpisodeServer,
-  IVideo,
-  StreamingServers,
-  MediaStatus,
-  SubOrSub,
   IAnimeResult,
+  IEpisodeServer,
+  ISearch,
   ISource,
+  IVideo,
   MediaFormat,
+  MediaStatus,
   ProxyConfig,
+  StreamingServers,
+  SubOrSub,
 } from '../../models';
 import { USER_AGENT } from '../../utils';
-import { GogoCDN, StreamSB } from '../../extractors';
 
 class Gogoanime extends AnimeParser {
   override readonly name = 'Gogoanime';
-  protected override baseUrl = 'https://gogoanime3.net';
+  protected override baseUrl = 'https://gogoanime3.co';
   protected override logo =
     'https://play-lh.googleusercontent.com/MaGEiAEhNHAJXcXKzqTNgxqRmhuKB1rCUgb15UrN_mWUNRnLpO5T1qja64oRasO7mn0';
   protected override classPath = 'ANIME.Gogoanime';
-  private readonly ajaxUrl = 'https://ajax.gogo-load.com/ajax';
+  private readonly ajaxUrl = 'https://ajax.gogocdn.net/ajax';
 
   /**
    *
