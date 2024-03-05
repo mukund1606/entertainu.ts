@@ -1,5 +1,11 @@
 # @mukund1606/entertainu
 
+## 0.0.8
+
+### Patch Changes
+
+- 4ee0ec1: gogoanime ajax changes
+
 ## 0.0.7
 
 ### Patch Changes
